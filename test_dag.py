@@ -44,53 +44,53 @@ dag = DAG(
     schedule_interval=None,
 )
 
-# t1, t2 and t3 are examples of tasks created by instantiating operators
-t1 = BashOperator(
-    task_id='print_date',
-    bash_command='date',
-    dag=dag,
-)
+# # t1, t2 and t3 are examples of tasks created by instantiating operators
+# t1 = BashOperator(
+#     task_id='print_date',
+#     bash_command='date',
+#     dag=dag,
+# )
 
-t2 = BashOperator(
-    task_id='sleep',
-    depends_on_past=False,
-    bash_command='sleep 10',
-    retries=3,
-    dag=dag,
-)
+# t2 = BashOperator(
+#     task_id='sleep',
+#     depends_on_past=False,
+#     bash_command='sleep 10',
+#     retries=3,
+#     dag=dag,
+# )
 
-t3 = BashOperator(
-    task_id='echo',
-    bash_command="echo 'this is task 3'",
-    dag=dag,
-)
+# t3 = BashOperator(
+#     task_id='echo',
+#     bash_command="echo 'this is task 3'",
+#     dag=dag,
+# )
 
-tasks = ['file1', 'file2', 'file3']
+# tasks = ['file1', 'file2', 'file3']
 
-def _get_bash_ops(**kwargs):
+# def _get_bash_ops(**kwargs):
     
-    fn = kwargs['fn']
-    cmd = 'python write_file.py --task write_csv  --fn {}'.format(fn)
-    obj = BashOperator(
-            task_id='write_{}'.format(fn),
-            bash_command=cmd,
-            dag=kwargs['dag'],
-            )
+#     fn = kwargs['fn']
+#     cmd = 'python write_file.py --task write_csv  --fn {}'.format(fn)
+#     obj = BashOperator(
+#             task_id='write_{}'.format(fn),
+#             bash_command=cmd,
+#             dag=kwargs['dag'],
+#             )
 
-    return obj
+#     return obj
 
-start = DummyOperator(task_id = 'start', dag=dag)
-end = DummyOperator(task_id = 'end', dag=dag)
+# start = DummyOperator(task_id = 'start', dag=dag)
+# end = DummyOperator(task_id = 'end', dag=dag)
 
-# this is the same as
-# t1 >> t2
-# t1 >> t3
+# # this is the same as
+# # t1 >> t2
+# # t1 >> t3
 
-t1 >> [t2, t3] >> start 
+# t1 >> [t2, t3] >> start 
 
-fn_lst = ['file1', 'file2', 'file3']
-for fn in fn_lst:
-    start >> _get_bash_ops(**{'fn': fn, 'dag': dag}) >> end
+# fn_lst = ['file1', 'file2', 'file3']
+# for fn in fn_lst:
+#     start >> _get_bash_ops(**{'fn': fn, 'dag': dag}) >> end
 
 task_test =  BashOperator(
     task_id='task_test',
